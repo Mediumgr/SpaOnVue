@@ -7,6 +7,7 @@ import NewAd from '@/components/Ads/NewAd.vue'
 import Login from '@/components/Auth/Login.vue'
 import Registration from '@/components/Auth/Registration.vue'
 import Orders from '@/components/User/Orders.vue'
+import Somecomponent from '@/components/Ads/Somecomponent.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes = [{
   path: '/orders',
   name: 'orders',
   component: Orders
+},
+{
+  path: '/some',
+  name: 'some',
+  component: Somecomponent
 }
 ]
 
