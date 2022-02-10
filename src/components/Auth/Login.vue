@@ -1,69 +1,118 @@
 <template>
-<v-container
-          class="fill-height"
-          fluid
-        >
-          <v-row
-            align="center"
-            justify="center"
-          >
-            <v-col
-              cols="12"
-              sm="8"
-              md="4"
-            >
-              <v-card class="elevation-12">
-                <v-toolbar
-                  color="cyan lighten-1"
-                  dark
-                  flat
-                >
-                  <v-toolbar-title>Login form</v-toolbar-title>
-                </v-toolbar>
-                <v-card-text>
-                  <v-form v-model="valid" ref="form" validation>
-                    <v-text-field
-                      label="Email"
-                      name="email"
-                      prepend-icon="mdi-account"
-                      type="email"
-                      v-model="email"
-                    ></v-text-field>
-                    <v-text-field
-                      id="password"
-                      label="Password"
-                      name="password"
-                      prepend-icon="mdi-lock"
-                      type="password"
-                      v-model="password"
-                    ></v-text-field>
-                  </v-form>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="cyan lighten-1" @click="onSubmit">Login</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+  <v-container class="fill-height" fluid>
+    <v-row align="center" justify="center">
+      <v-col class="col-sm-10 col-md-6 loginForm">
+        <v-card class="elevation-12">
+          <v-toolbar color="primary lighten-2" dark flat>
+            <v-toolbar-title>Login form</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form v-model="valid" ref="form" validation>
+              <v-text-field
+                label="E-mail"
+                name="email"
+                prepend-icon="mdi-account"
+                type="email"
+                v-model="email"
+                required
+                :error-messages="emailErrors"
+                @input="$v.email.$touch()"
+                @blur="$v.email.$touch()">
+              </v-text-field>
+              <v-text-field
+                id="password"
+                label="Password"
+                name="input-10-2"
+                prepend-icon="mdi-lock"
+                v-model="password"
+                :counter="8"
+                :rules="[rules.required, rules.min]"
+                :type="show ? 'text' : 'password'"
+                hint="At least 6 characters"
+                class="input-group--focused"
+                @click:append="show = !show"
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'">
+              </v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="cyan lighten-1"
+              @click="onSubmit"
+              :disabled="!valid || loading"
+              :loading="loading">
+              Login
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
-  data () {
+  mixins: [validationMixin],
+  validations: {
+    name: { required },
+    email: { required, email }
+  },
+  data() {
     return {
-      email: '',
-      password: '',
-      valid: false
-    }
+      email: "",
+      password: "",
+      valid: false,
+      show: false,
+      rules: {
+        required: value => !!value || "Minimum 6 characters required ",
+        min: value =>
+          (value.length >= 6 && value.length <= 8) ||
+          " from 6 to 8 characters required"
+      }
+    };
   },
   methods: {
-    onSubmit () {
-
+    onSubmit() {
+      if (this.$refs.form.validate) {
+        const user = {
+          password: this.password,
+          email: this.email
+        };
+        this.$store
+          .dispatch("loginUser", user)
+          .then(() => {
+            this.$router.push("/");
+          })
+          .catch(() => {});
+      }
+    }
+  },
+  computed: {
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.email.$dirty) return errors;
+      !this.$v.email.email && errors.push("Must be valid e-mail");
+      !this.$v.email.required && errors.push("E-mail is required");
+      return errors;
+    },
+    loading() {
+      this.$store.getters.loading;
+    }
+  },
+  created() {
+    if (this.$route.query["loginError"] && this.$store.getters.user === null) {
+      this.$store.dispatch("setError", "Please log in to access this page");
     }
   }
-}
-// начать с 6 видео 8:43
+};
 </script>
+
+<style scoped>
+.loginForm {
+  padding-top: 115px;
+}
+</style>

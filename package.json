@@ -9,14 +9,20 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "firebase": "^9.6.1",
+    "firebase-admin": "^10.0.1",
+    "firebase_core": "^1.10.6",
+    "i": "^0.3.7",
+    "npm": "^8.3.0",
+    "vee-validate": "^3.4.14",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vuelidate": "^0.7.7",
     "vuetify": "^2.4.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
@@ -33,5 +39,17 @@
     "vue-cli-plugin-vuetify": "~2.4.1",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
-  }
+  },
+  "description": "## Project setup ``` npm install ```",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mediumgr/SpaOnVue.git"
+  },
+  "author": "Ruslan Guseinov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mediumgr/SpaOnVue/issues"
+  },
+  "homepage": "https://github.com/Mediumgr/SpaOnVue#readme"
 }
