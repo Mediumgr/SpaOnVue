@@ -2,6 +2,6 @@
 
 Посмотреть работу можно просто кликнув по ссылке:
 
-spa-onvue.web.app
+http://spa-onvue.web.app
  или
-spa-onvue.firebaseapp.com
+http://spa-onvue.firebaseapp.com
