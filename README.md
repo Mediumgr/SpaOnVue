@@ -1,24 +1,7 @@
-# spa
+Адаптивное под мобильные устройства одностраничное SPA приложение, созданное на библиотеке Vuetify с применением облачной база данных Firebase с регистрацией и входом. SPA сделано на основе 2-й версии фрэймворка Vue.js на системе Vue-Cli с использованием инструментов: Vuex, Vue-router. 
 
-## Project setup
-```
-npm install
-```
+Посмотреть работу можно просто кликнув по ссылке:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+ или
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
