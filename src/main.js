@@ -18,12 +18,9 @@ new Vue({
   props: {
     source: String
   },
-  data: () => ({
-    drawer: null
-  }),
   render: h => h(App),
-  created() {
-    const app = firebase.initializeApp({
+  created () {
+    firebase.initializeApp({
       apiKey: 'AIzaSyAkmJC44dDYy7DpDipE7FdcrcdziB8UaZI',
       authDomain: 'itc-ads-5539f.firebaseapp.com',
       databaseURL: 'https://itc-ads-5539f-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -33,11 +30,8 @@ new Vue({
       appId: '1:843900498226:web:3c8c28b379d665c1b6a72b',
       measurementId: 'G-D6SNMTS0YB'
     })
-    /* для отслеживания и оставления уже залогинных пользователей в случае обновления страницы: */
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.$store.dispatch("autoLoginUser", user)
-      }
+    firebase.auth().onAuthStateChanged(() => {
+      this.$store.dispatch('autoLoginUser')
     })
     this.$store.dispatch('fetchAds')
   }

@@ -25,7 +25,7 @@
       </v-row>
     </v-container>
     <v-container v-else-if="!orders.length && localLoading === false">
-      <h3 align="center" justify="center" class="text-sm-h5 mt-16 pl-4">
+      <h3 align="center" class="text-sm-h5 mt-16 pl-4">
         You have no any orders from your presented cars. You can <router-link style="text-decoration: none; color: green;"
             :to="{ name: 'new' }">add</router-link> a car and then place an order of it to see how it works.
       </h3>
@@ -53,33 +53,33 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       localLoading: false
-    };
+    }
   },
   methods: {
-    markDone(order) {
+    markDone (order) {
       this.$store
-        .dispatch("markOrderDone", order.id)
+        .dispatch('markOrderDone', order.id)
         .then(() => {
-          order.done = true;
+          order.done = true
         })
-        .catch(() => {});
+        .catch(() => {})
     }
   },
   computed: {
-    orders() {
-      return this.$store.getters.orders;
+    orders () {
+      return this.$store.getters.orders
     }
   },
-  created() {
-    this.localLoading = true;
-    this.$store.dispatch("fetchOrders").finally(() => {
-      this.localLoading = false;
-    });
+  created () {
+    this.localLoading = true
+    this.$store.dispatch('fetchOrders').finally(() => {
+      this.localLoading = false
+    })
   }
-};
+}
 </script>
 
 <style scoped>

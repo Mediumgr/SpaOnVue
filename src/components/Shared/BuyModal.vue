@@ -10,59 +10,41 @@
           Do you want to buy it?
         </v-card-text>
         <v-divider></v-divider>
-        <validation-observer ref="observer" v-slot="{ invalid }">
-          <form @submit.prevent="submit">
-            <validation-provider
-              v-slot="{ errors }"
-              name="Name"
-              rules="required|max:10">
-              <v-text-field
-                label="Your name"
-                name="name"
-                :counter="10"
-                :error-messages="errors"
-                v-model="name"
-                required>
-              </v-text-field>
-            </validation-provider>
-            <validation-provider
-              v-slot="{ errors }"
+          <v-form ref="observer" v-model="valid">
+            <v-text-field
+              label="Name"
+              name="name"
+              type="text"
+              v-model="name"
+              required
+              :rules="[rules.nameRequired]"
+            ></v-text-field>
+            <v-text-field
+              label="Phone"
               name="phone"
-              :rules="{
-                required: true,
-                digits: 11,
-                regex: '^(8)\\d{10}$'
-              }">
-              <v-text-field
-                label="Your phone"
-                name="phone"
-                v-model="phone"
-                :counter="11"
-                :error-messages="errors"
-                required>
-              </v-text-field>
-            </validation-provider>
+              type="text"
+              v-model="phone"
+              required
+              :rules="[rules.phoneRequired, rules.phoneRegExp]"
+            >
+            </v-text-field>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                color="yellow darken-1"
-                text
+                color="yellow darken-2"
                 @click="onCancel"
                 :disabled="localLoading">
                 Close
               </v-btn>
               <v-btn
                 color="green darken-1"
-                text
-                type="submit"
                 @click="onSave"
-                :disabled="invalid"
+                :disabled="!valid"
                 :loading="localLoading">
                 Buy it!
               </v-btn>
             </v-card-actions>
-          </form>
-        </validation-observer>
+          </v-form>
       </v-card>
     </v-dialog>
     <v-dialog
@@ -94,98 +76,70 @@
 </template>
 
 <script>
-import { required, digits, max, regex } from "vee-validate/dist/rules";
-import {
-  extend,
-  ValidationObserver,
-  ValidationProvider,
-  setInteractionMode
-} from "vee-validate";
-
-setInteractionMode("eager");
-
-extend("digits", {
-  ...digits,
-  message: "{_field_} needs to be {length} digits. ({_value_})"
-});
-
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty"
-});
-
-extend("max", {
-  ...max,
-  message: "{_field_} may not be greater than {length} characters"
-});
-
-extend("regex", {
-  ...regex,
-  message: "{_field_} {_value_} does not match {8*********}"
-});
-
 export default {
-  props: ["ad", "openModal"],
-  components: {
-    ValidationProvider,
-    ValidationObserver
-  },
-  data() {
+  props: ['ad', 'openModal'],
+  data () {
     return {
-      phone: "",
-      name: "",
+      phone: '',
+      name: '',
       localLoading: false,
-      success: "Заказ отправлен",
+      success: 'Заказ отправлен',
       openSuccess: true,
-      openSuccessDialog: false
-    };
+      openSuccessDialog: false,
+      valid: false,
+      rules: {
+        nameRequired: value => !!value || 'Type your name',
+        phoneRequired: value => !!value || 'Type your phone number',
+        phoneRegExp: value => {
+          const regExp = /^(\+)?(\(\d{2,3}\) ?\d|\d)(([-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/
+          return regExp.test(value) || 'Please type your phone number: +7 (911) 111-11-11'
+        }
+      }
+    }
   },
   methods: {
-    onCancel() {
-      this.phone = "";
-      this.name = "";
-      this.$emit("update:openModal", false);
+    onCancel () {
+      this.phone = ''
+      this.name = ''
+      this.$emit('update:openModal', false)
     },
-    submit() {
-      this.$refs.observer.validate();
-    },
-    onSave() {
+    onSave () {
       if (
-        this.name !== "" &&
-        this.phone !== "" &&
+        this.name !== '' &&
+        this.phone !== '' &&
         this.$refs.observer.validate()
       ) {
-        this.localLoading = true;
+        this.localLoading = true
         this.$store
-          .dispatch("createOrder", {
+          .dispatch('createOrder', {
             phone: this.phone,
             name: this.name,
             adId: this.ad.id,
             ownerId: this.ad.ownerId
           })
           .then(() => {
-            this.openSuccessDialog = true;
+            this.openSuccessDialog = true
           })
           .finally(() => {
-            this.phone = "";
-            this.name = "";
-            this.localLoading = false;
-            this.$emit("update:openModal", false);
-          });
+            this.phone = ''
+            this.name = ''
+            this.localLoading = false
+            this.$emit('update:openModal', false)
+          })
       }
     }
   },
   computed: {
     open: {
-      get: function() {
-        return this.openModal;
+      get: function () {
+        return this.openModal
       },
-      set: function() {
-        this.$emit("update:openModal", false);
+      set: function () {
+        this.$emit('update:openModal', false)
       }
     }
   }
-};
+}
 </script>
 
 <style>

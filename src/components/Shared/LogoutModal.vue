@@ -27,18 +27,18 @@
 
 <script>
 export default {
-  props: ["openDialog"],
+  props: ['openDialog'],
   methods: {
-    onLogout() {
-      this.$store.dispatch("logoutUser");
-      this.$router.push("/");
-      this.$emit("update:openDialog", false);
+    onLogout () {
+      this.$store.dispatch('logoutUser')
+      this.$router.push('/')
+      this.$emit('update:openDialog', false)
     },
-    stayLoggedIn() {
-      this.$emit("update:openDialog", false);
+    stayLoggedIn () {
+      this.$emit('update:openDialog', false)
     }
   }
-};
+}
 </script>
 
 <style scoped></style>

@@ -7,17 +7,17 @@
             <v-toolbar-title>Registration form</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid" ref="form" validation>
+            <v-form v-model="valid" ref="form">
               <v-text-field
                 label="E-mail"
                 name="email"
                 prepend-icon="mdi-account"
                 type="email"
                 v-model="email"
-                :rules="[rules.required]"
                 :error-messages="emailErrors"
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()">
+                @blur="$v.email.$touch()"
+                required
+              >
               </v-text-field>
               <v-text-field
                 id="password"
@@ -31,7 +31,9 @@
                 :type="show ? 'text' : 'password'"
                 hint="At least 6 characters"
                 class="input-group--focused"
-                @click:append="show = !show">
+                @click:append="show = !show"
+                required
+              >
               </v-text-field>
               <v-text-field
                 id="confirmPassword"
@@ -45,23 +47,26 @@
                 :type="show ? 'text' : 'password'"
                 hint="At least 6 characters"
                 class="input-group--focused"
-                @click:append="show = !show">
+                @click:append="show = !show"
+                required
+              >
               </v-text-field>
+              <v-card-actions>
+                <v-btn class="error" @click="resetForm">
+                  Reset form
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="cyan lighten-1"
+                  @click="onSubmit"
+                  :disabled="!valid || loading"
+                  :loading="loading"
+                >
+                  create account
+                </v-btn>
+              </v-card-actions>
             </v-form>
           </v-card-text>
-          <v-card-actions>
-            <v-btn class="error" @click="resetForm">
-              Reset form
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="cyan lighten-1"
-              @click="onSubmit"
-              :disabled="!valid || loading"
-              :loading="loading">
-              create account
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -69,8 +74,8 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+import { validationMixin } from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   mixins: [validationMixin],
@@ -78,55 +83,56 @@ export default {
   validations: {
     email: { required, email }
   },
-  data() {
+  data () {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       valid: false,
       show: false,
-      confirmPassword: "",
+      confirmPassword: '',
       rules: {
-        required: value => !!value || "Minimum 6 characters required ",
+        required: value => !!value || 'Minimum 6 characters required ',
         min: value =>
-          (value.length >= 6 && value.length <= 8) ||
-          "Min 6 characters and max 8",
+          (value && value.length >= 6 && value.length <= 8) ||
+          'Min 6 characters and max 8',
         passwordMatch: value =>
-          value === this.password || "Password should be matched"
+          value === this.password || 'Password should be matched'
       }
-    };
+    }
   },
   methods: {
-    onSubmit() {
+    onSubmit () {
       if (this.$refs.form.validate()) {
         const user = {
           password: this.password,
           email: this.email
-        };
+        }
         this.$store
-          .dispatch("registerUser", user)
+          .dispatch('registerUser', user)
           .then(() => {
-            this.$router.push("/");
+            this.$router.push('/')
           })
-          .catch(() => {});
+          .catch(() => {})
       }
     },
-    resetForm() {
-      (this.email = ""), (this.password = ""), (this.confirmPassword = "");
+    resetForm () {
+      this.$refs.form.reset()
+      this.$v.$reset()
     }
   },
   computed: {
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
-      return errors;
+    emailErrors () {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('Must be valid e-mail')
+      !this.$v.email.required && errors.push('E-mail is required')
+      return errors
     },
-    loading() {
-      return this.$store.getters.loading;
+    loading () {
+      return this.$store.getters.loading
     }
   }
-};
+}
 </script>
 
 <style scoped>

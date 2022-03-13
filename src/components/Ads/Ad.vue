@@ -37,27 +37,27 @@
 </template>
 
 <script>
-import EditedAdModal from "./EditedAdModal.vue"
+import EditedAdModal from './EditedAdModal.vue'
 
 export default {
-  props: ["id"],
-  data() {
+  props: ['id'], // props: true (router/index.js)
+  data () {
     return {
       dialog: false,
       editedDialog: false
-    };
+    }
   },
-  components: {EditedAdModal},
+  components: { EditedAdModal },
   computed: {
-    ad() {
-      return this.$store.getters.addById(this.id);
+    ad () {
+      return this.$store.getters.addById(this.id)
     },
-    loading() {
-      this.$store.getters.loading
+    loading () {
+      return this.$store.getters.loading
     },
-    isOwner() {
-      return this.ad.ownerId === this.$store.getters.user.id
+    isOwner () {
+      return this.ad.ownerId === this.$store.getters.user
     }
   }
-};
+}
 </script>

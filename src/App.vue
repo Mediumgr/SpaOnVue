@@ -95,53 +95,56 @@
 </template>
 
 <script>
+
+import messages from '@/utils/messages'
+
 export default {
-  data() {
+  data () {
     return {
       drawer: false,
       snackbar: true,
       dialog: false,
       selectedItem: 1
-    };
+    }
   },
   methods: {
-    toggleTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    toggleTheme () {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
-    closeError() {
-      this.$store.dispatch("clearError");
+    closeError () {
+      this.$store.dispatch('clearError')
     }
   },
   computed: {
-    error() {
-      return this.$store.getters.error;
+    error () {
+      return messages[this.$store.getters.error] || this.$store.getters.error
     },
-    isUserLoggedIn() {
-      return this.$store.getters.isUserLoggedIn;
+    isUserLoggedIn () {
+      return this.$store.getters.isUserLoggedIn
     },
-    links() {
+    links () {
       if (this.isUserLoggedIn) {
         return [
-          { title: "Orders", icon: "bookmark_border", url: "/orders" },
-          { title: "New ad", icon: "note_add", url: "/new" },
-          { title: "My ads", icon: "list", url: "/list" }
-        ];
+          { title: 'Orders', icon: 'bookmark_border', url: '/orders' },
+          { title: 'New ad', icon: 'note_add', url: '/new' },
+          { title: 'My ads', icon: 'list', url: '/list' }
+        ]
       }
       return [
-        { title: "Login", icon: "lock", url: "/login" },
-        { title: "Registration", icon: "face", url: "/registration" }
-      ];
+        { title: 'Login', icon: 'lock', url: '/login' },
+        { title: 'Registration', icon: 'face', url: '/registration' }
+      ]
     },
-    loading() {
-      return this.$store.getters.loading;
+    loading () {
+      return this.$store.getters.loading
     }
   }
-};
+}
 </script>
 
 <style scoped>
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 .myName {
   cursor: pointer;

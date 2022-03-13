@@ -1,72 +1,76 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-
-class User {
-  constructor(id) {
-    this.id = id;
-  }
-}
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
 
 export default {
   state: {
     user: null
   },
   mutations: {
-    setUser(state, payload) {
-      state.user = payload;
+    setUser (state, payload) {
+      state.user = payload
     }
   },
   actions: {
-    async registerUser({
-      commit
+    async registerUser ({
+      dispatch, commit
     }, {
       email,
       password
     }) {
-      commit("clearError");
-      commit("setLoading", true);
+      commit('clearError')
+      commit('setLoading', true)
       try {
-        const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        commit("setUser", new User(user.user.uid));
-        commit("setLoading", false);
-      } catch(error) {
-        commit("setLoading", false);
-        commit("setError", error.message);
-        throw new Error;
+        await firebase.auth().createUserWithEmailAndPassword(email, password)
+        const userId = await dispatch('getUid')
+        commit('setUser', userId)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.code)
+        throw new Error()
       }
     },
-    async loginUser({
-      commit
+    getUid () {
+      const user = firebase.auth().currentUser
+      return user ? user.uid : null
+    },
+    async loginUser ({
+      dispatch, commit
     }, {
       email,
       password
     }) {
-      commit("clearError");
-      commit("setLoading", true);
+      commit('clearError')
+      commit('setLoading', true)
       try {
-        const user = await firebase.auth().signInWithEmailAndPassword(email, password);
-        commit("setUser", new User(user.user.uid));
-        commit("setLoading", false);
-      } catch(error) {
-        commit("setLoading", false);
-        commit("setError", error.message);
-        throw new Error;
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+        const userId = await dispatch('getUid')
+        commit('setUser', userId)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.code)
+        throw new Error()
       }
     },
-    autoLoginUser ({commit}, payload) {
-      commit("setUser", new User(payload.uid))
+    async autoLoginUser ({ commit, dispatch }) {
+      const userId = await dispatch('getUid')
+      commit('setUser', userId)
     },
-    logoutUser({commit}) {
-        firebase.auth().signOut()
-        commit("setUser", null)
+    async logoutUser ({
+      commit
+    }) {
+      await firebase.auth().signOut()
+      commit('setUser', null)
+      commit('setError', 'logout')
     }
   },
   getters: {
-    user(state) {
-      return state.user;
+    user (state) {
+      return state.user
     },
-    isUserLoggedIn(state) {
+    isUserLoggedIn (state) {
       return state.user !== null
     }
   }
-};
+}

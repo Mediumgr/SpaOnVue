@@ -1,28 +1,18 @@
 import firebase from 'firebase/compat/app'
-import 'firebase/compat/database';
-import 'firebase/compat/storage';
-
-class Order {
-  constructor(name, phone, adId, done = false, id = null) {
-    this.name = name
-    this.phone = phone
-    this.adId = adId
-    this.done = done
-    this.id = id
-  }
-}
+import 'firebase/compat/database'
+import 'firebase/compat/storage'
 
 export default {
   state: {
     orders: []
   },
   mutations: {
-    loadOrders(state, payload) {
+    loadOrders (state, payload) {
       state.orders = payload
     }
   },
   actions: {
-    async createOrder({
+    async createOrder ({
       commit
     }, {
       name,
@@ -30,56 +20,56 @@ export default {
       adId,
       ownerId
     }) {
-      const order = new Order(name, phone, adId)
+      const order = { name, phone, adId, done: false }
       commit('clearError')
       try {
         await firebase.database().ref(`/users/${ownerId}/orders`).push(order)
       } catch (error) {
-        commit('setError', error.message)
-        throw new Error
+        console.log(error)
+        commit('setError', 'Server failure: Your order has not been sent')
+        throw new Error()
       }
     },
-    async fetchOrders({
+    async fetchOrders ({
       commit,
       getters
     }) {
       commit('clearError')
-      const resultOrders = []
       try {
-        const firebaseVal = await firebase.database().ref(`/users/${getters.user.id}/orders`).once('value')
-        const orders = firebaseVal.val()
-        Object.keys(orders).forEach(key => {
-          const order = orders[key]
-          resultOrders.push(new Order(order.name, order.phone, order.adId, order.done, key))
-        })
+        const orders = (await firebase.database().ref(`/users/${getters.user}/orders`).once('value')).val()
+        const resultOrders = Object.keys(orders).map((key) => ({
+          ...orders[key],
+          done: orders[key].done,
+          id: key
+        }))
         commit('loadOrders', resultOrders)
       } catch (error) {
-        commit('setError', error.message)
-        throw new Error
+        commit('setError', 'Server failure: data has not been received')
+        throw new Error()
       }
     },
-    async markOrderDone({
+    async markOrderDone ({
       commit,
       getters
     }, payload) {
       commit('clearError')
       try {
-        await firebase.database().ref(`/users/${getters.user.id}/orders`).child(payload).update({
+        await firebase.database().ref(`/users/${getters.user}/orders`).child(payload).update({
           done: true
         })
       } catch (error) {
-        commit('setError', 'Error: your input data has not been sent due to server failure(order.js)')
+        commit('setError', 'Server failure: order has not been changed')
       }
     }
   },
   getters: {
-    doneOrders(state) {
+    doneOrders (state) {
       return state.orders.filter(order => order.done)
     },
-    undoneOrders(state) {
+    undoneOrders (state) {
       return state.orders.filter(order => !order.done)
     },
-    orders(state, getters) {
+    orders (state, getters) {
       return getters.undoneOrders.concat(getters.doneOrders)
     }
   }

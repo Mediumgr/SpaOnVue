@@ -7,7 +7,7 @@
             <v-toolbar-title>Login form</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid" ref="form" validation>
+            <v-form v-model="valid" ref="form">
               <v-text-field
                 label="E-mail"
                 name="email"
@@ -15,9 +15,8 @@
                 type="email"
                 v-model="email"
                 required
-                :error-messages="emailErrors"
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()">
+                :rules="[rules.emailRequired, rules.emailRegExp]"
+              >
               </v-text-field>
               <v-text-field
                 id="password"
@@ -31,17 +30,22 @@
                 hint="At least 6 characters"
                 class="input-group--focused"
                 @click:append="show = !show"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'">
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              >
               </v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
+            <v-btn class="error" @click="resetForm">
+              Reset
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn
               color="cyan lighten-1"
               @click="onSubmit"
               :disabled="!valid || loading"
-              :loading="loading">
+              :loading="loading"
+            >
               Login
             </v-btn>
           </v-card-actions>
@@ -52,63 +56,57 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
 
 export default {
-  mixins: [validationMixin],
-  validations: {
-    name: { required },
-    email: { required, email }
-  },
-  data() {
+  data () {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       valid: false,
       show: false,
       rules: {
-        required: value => !!value || "Minimum 6 characters required ",
+        required: value => !!value || 'Minimum 6 characters required ',
         min: value =>
-          (value.length >= 6 && value.length <= 8) ||
-          " from 6 to 8 characters required"
+          (value && value.length >= 6 && value.length <= 8) ||
+          'from 6 to 8 characters required',
+        emailRequired: value => !!value || 'E-mail is required',
+        emailRegExp: value => {
+          const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return regExp.test(value) || 'Must be valid e-mail'
+        }
       }
-    };
+    }
   },
   methods: {
-    onSubmit() {
+    onSubmit () {
       if (this.$refs.form.validate) {
         const user = {
           password: this.password,
           email: this.email
-        };
+        }
         this.$store
-          .dispatch("loginUser", user)
+          .dispatch('loginUser', user)
           .then(() => {
-            this.$router.push("/");
+            this.$router.push('/')
           })
-          .catch(() => {});
+          .catch(() => {})
       }
+    },
+    resetForm () {
+      this.$refs.form.reset()
     }
   },
   computed: {
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
-      return errors;
-    },
-    loading() {
-      this.$store.getters.loading;
+    loading () {
+      return this.$store.getters.loading
     }
   },
-  created() {
-    if (this.$route.query["loginError"] && this.$store.getters.user === null) {
-      this.$store.dispatch("setError", "Please log in to access this page");
+  created () {
+    if (this.$route.query.loginError && this.$store.getters.user === null) {
+      this.$store.dispatch('setError', 'Please register your account to view all pages')
     }
   }
-};
+}
 </script>
 
 <style scoped>

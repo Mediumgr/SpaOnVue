@@ -27,39 +27,39 @@
 
 <script>
 export default {
-  props: ["ad", "edited"],
-  data() {
+  props: ['ad', 'edited'],
+  data () {
     return {
       description: this.ad.description,
       title: this.ad.title
-    };
+    }
   },
   methods: {
-    onCancel() {
-      this.description = this.ad.description;
-      this.title = this.ad.title;
-      this.$emit("update:edited", false);
+    onCancel () {
+      this.description = this.ad.description
+      this.title = this.ad.title
+      this.$emit('update:edited', false)
     },
-    onSave() {
-      if (this.ad.description !== "" && this.ad.title !== "") {
-        this.$store.dispatch("updatedAd", {
+    onSave () {
+      if (this.ad.description !== '' && this.ad.title !== '') {
+        this.$store.dispatch('updatedAd', {
           description: this.description,
           title: this.title,
           id: this.ad.id
-        });
-        this.$emit("update:edited", false);
+        })
+        this.$emit('update:edited', false)
       }
     }
   },
   computed: {
     open: {
-      get: function() {
-        return this.edited;
+      get: function () {
+        return this.edited
       },
-      set: function() {
-        this.$emit("update:edited", false);
+      set: function () {
+        this.$emit('update:edited', false)
       }
     }
   }
-};
+}
 </script>

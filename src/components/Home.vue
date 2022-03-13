@@ -35,33 +35,33 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       dialog: false,
       orderAd: null
-    };
+    }
   },
   methods: {
-    onClick(ad) {
-      this.dialog = true,
+    onClick (ad) {
+      this.dialog = true
       this.orderAd = ad
     }
   },
   computed: {
-    ads() {
-      return this.$store.getters.ads;
+    ads () {
+      return this.$store.getters.ads
     },
-    notRegistered() {
+    notRegistered () {
       return this.$store.getters.user === null
     }
   }
-};
+}
 </script>
 
 <style scoped>
 .car-link {
   position: absolute;
-  bottom: 0%;
+  bottom: 0;
   left: 50%;
   transform: translate(-50%, 0);
   padding: 5px 15px;
