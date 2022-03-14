@@ -87,7 +87,7 @@
         <span class="date">{{ new Date().getFullYear() }}</span>
         <a href="https://github.com/Mediumgr" target="blank" class="github">
           <span class="myName">Ruslan Guseinov</span>
-          <img src="./img/git_icon_19pcs.jpg" alt="github" class="img" />
+          <img src="./assets/img/git_icon_19pcs.jpg" alt="github" class="img" />
         </a>
       </v-row>
     </v-footer>
@@ -95,51 +95,50 @@
 </template>
 
 <script>
-
-import messages from '@/utils/messages'
+import messages from "@/utils/messages";
 
 export default {
-  data () {
+  data() {
     return {
       drawer: false,
       snackbar: true,
       dialog: false,
       selectedItem: 1
-    }
+    };
   },
   methods: {
-    toggleTheme () {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    toggleTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
-    closeError () {
-      this.$store.dispatch('clearError')
+    closeError() {
+      this.$store.dispatch("clearError");
     }
   },
   computed: {
-    error () {
-      return messages[this.$store.getters.error] || this.$store.getters.error
+    error() {
+      return messages[this.$store.getters.error] || this.$store.getters.error;
     },
-    isUserLoggedIn () {
-      return this.$store.getters.isUserLoggedIn
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
     },
-    links () {
+    links() {
       if (this.isUserLoggedIn) {
         return [
-          { title: 'Orders', icon: 'bookmark_border', url: '/orders' },
-          { title: 'New ad', icon: 'note_add', url: '/new' },
-          { title: 'My ads', icon: 'list', url: '/list' }
-        ]
+          { title: "Orders", icon: "bookmark_border", url: "/orders" },
+          { title: "New ad", icon: "note_add", url: "/new" },
+          { title: "My ads", icon: "list", url: "/list" }
+        ];
       }
       return [
-        { title: 'Login', icon: 'lock', url: '/login' },
-        { title: 'Registration', icon: 'face', url: '/registration' }
-      ]
+        { title: "Login", icon: "lock", url: "/login" },
+        { title: "Registration", icon: "face", url: "/registration" }
+      ];
     },
-    loading () {
-      return this.$store.getters.loading
+    loading() {
+      return this.$store.getters.loading;
     }
   }
-}
+};
 </script>
 
 <style scoped>

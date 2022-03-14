@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
-import { required, email } from 'vuelidate/lib/validators'
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
   mixins: [validationMixin],
@@ -83,56 +83,56 @@ export default {
   validations: {
     email: { required, email }
   },
-  data () {
+  data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       valid: false,
       show: false,
-      confirmPassword: '',
+      confirmPassword: "",
       rules: {
-        required: value => !!value || 'Minimum 6 characters required ',
+        required: value => !!value || "Minimum 6 characters required ",
         min: value =>
           (value && value.length >= 6 && value.length <= 8) ||
-          'Min 6 characters and max 8',
+          "Min 6 characters and max 8",
         passwordMatch: value =>
-          value === this.password || 'Password should be matched'
+          value === this.password || "Password should be matched"
       }
-    }
+    };
   },
   methods: {
-    onSubmit () {
+    onSubmit() {
       if (this.$refs.form.validate()) {
         const user = {
           password: this.password,
           email: this.email
-        }
+        };
         this.$store
-          .dispatch('registerUser', user)
+          .dispatch("registerUser", user)
           .then(() => {
-            this.$router.push('/')
+            this.$router.push("/");
           })
-          .catch(() => {})
+          .catch(() => {});
       }
     },
-    resetForm () {
-      this.$refs.form.reset()
-      this.$v.$reset()
+    resetForm() {
+      this.$refs.form.reset();
+      this.$v.$reset();
     }
   },
   computed: {
-    emailErrors () {
-      const errors = []
-      if (!this.$v.email.$dirty) return errors
-      !this.$v.email.email && errors.push('Must be valid e-mail')
-      !this.$v.email.required && errors.push('E-mail is required')
-      return errors
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.email.$dirty) return errors;
+      !this.$v.email.email && errors.push("Must be valid e-mail");
+      !this.$v.email.required && errors.push("E-mail is required");
+      return errors;
     },
-    loading () {
-      return this.$store.getters.loading
+    loading() {
+      return this.$store.getters.loading;
     }
   }
-}
+};
 </script>
 
 <style scoped>

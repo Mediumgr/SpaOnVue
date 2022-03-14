@@ -13,7 +13,7 @@
           <v-img :src="ad.imageSrc" height="200px"></v-img>
           <v-card-title>{{ ad.title }}</v-card-title>
           <v-card-subtitle class="subtitle">
-            {{ad.description}}
+            {{ ad.description }}
           </v-card-subtitle>
           <v-row class="mt-3 mb-1 mr-2">
             <v-spacer></v-spacer>
@@ -21,7 +21,7 @@
               <v-btn text :to="'/ad/' + ad.id" :disabled="notRegistered">
                 Open
               </v-btn>
-              <v-btn color="primary" dark @click.stop="onClick(ad)" >
+              <v-btn color="primary" dark @click.stop="onClick(ad)">
                 Buy
               </v-btn>
             </v-card-actions>
@@ -35,27 +35,27 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       dialog: false,
       orderAd: null
-    }
+    };
   },
   methods: {
-    onClick (ad) {
-      this.dialog = true
-      this.orderAd = ad
+    onClick(ad) {
+      this.dialog = true;
+      this.orderAd = ad;
     }
   },
   computed: {
-    ads () {
-      return this.$store.getters.ads
+    ads() {
+      return this.$store.getters.ads;
     },
-    notRegistered () {
-      return this.$store.getters.user === null
+    notRegistered() {
+      return this.$store.getters.user === null;
     }
   }
-}
+};
 </script>
 
 <style scoped>

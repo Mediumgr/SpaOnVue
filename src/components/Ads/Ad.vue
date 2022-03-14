@@ -23,7 +23,7 @@
                 </v-icon>
                 Edit
               </v-btn>
-              <edited-ad-modal :ad="ad" :edited.sync="editedDialog"/>
+              <edited-ad-modal :ad="ad" :edited.sync="editedDialog" />
               <v-btn color="primary" dark @click.stop="dialog = true">
                 Buy
               </v-btn>
@@ -37,27 +37,27 @@
 </template>
 
 <script>
-import EditedAdModal from './EditedAdModal.vue'
+import EditedAdModal from "./EditedAdModal.vue";
 
 export default {
-  props: ['id'], // props: true (router/index.js)
-  data () {
+  props: ["id"], // props: true (router/index.js)
+  data() {
     return {
       dialog: false,
       editedDialog: false
-    }
+    };
   },
   components: { EditedAdModal },
   computed: {
-    ad () {
-      return this.$store.getters.addById(this.id)
+    ad() {
+      return this.$store.getters.addById(this.id);
     },
-    loading () {
-      return this.$store.getters.loading
+    loading() {
+      return this.$store.getters.loading;
     },
-    isOwner () {
-      return this.ad.ownerId === this.$store.getters.user
+    isOwner() {
+      return this.ad.ownerId === this.$store.getters.user;
     }
   }
-}
+};
 </script>

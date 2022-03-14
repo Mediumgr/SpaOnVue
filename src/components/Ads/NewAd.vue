@@ -34,7 +34,13 @@
           />
         </v-row>
         <v-row class="mt-3 ml-1">
-          <img alt="image" :src="imageSrc" height="80px" width="350px" v-if="imageSrc" />
+          <img
+            alt="image"
+            :src="imageSrc"
+            height="80px"
+            width="350px"
+            v-if="imageSrc"
+          />
         </v-row>
         <v-row class="mt-3 ml-1 mb-3">
           <v-switch
@@ -61,56 +67,56 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      title: '',
-      description: '',
+      title: "",
+      description: "",
       valid: false,
       promo: false,
-      imageSrc: '',
+      imageSrc: "",
       image: null,
       rules: {
-        requiredTitle: value => !!value || 'Title is required',
-        requiredDescription: value => !!value || 'Description is required'
+        requiredTitle: value => !!value || "Title is required",
+        requiredDescription: value => !!value || "Description is required"
       }
-    }
+    };
   },
   methods: {
-    creatAd () {
+    creatAd() {
       if (this.$refs.form.validate()) {
         const ad = {
           title: this.title,
           description: this.description,
           promo: this.promo,
           image: this.image
-        }
+        };
         this.$store
-          .dispatch('createAd', ad)
+          .dispatch("createAd", ad)
           .then(() => {
-            this.$router.push('/list')
+            this.$router.push("/list");
           })
-          .catch(() => {})
+          .catch(() => {});
       }
     },
-    triggerUpload () {
-      this.$refs.inputFile.click()
+    triggerUpload() {
+      this.$refs.inputFile.click();
     },
-    onFileChange (event) {
-      const file = event.target.files[0]
-      const reader = new FileReader()
+    onFileChange(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
       reader.onload = () => {
-        this.imageSrc = reader.result
-      }
-      reader.readAsDataURL(file)
-      this.image = file
+        this.imageSrc = reader.result;
+      };
+      reader.readAsDataURL(file);
+      this.image = file;
     }
   },
   computed: {
-    loading () {
-      return this.$store.getters.loading
+    loading() {
+      return this.$store.getters.loading;
     }
   }
-}
+};
 </script>
 
 <style scoped>

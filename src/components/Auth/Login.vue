@@ -56,57 +56,59 @@
 </template>
 
 <script>
-
 export default {
-  data () {
+  data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       valid: false,
       show: false,
       rules: {
-        required: value => !!value || 'Minimum 6 characters required ',
+        required: value => !!value || "Minimum 6 characters required ",
         min: value =>
           (value && value.length >= 6 && value.length <= 8) ||
-          'from 6 to 8 characters required',
-        emailRequired: value => !!value || 'E-mail is required',
+          "from 6 to 8 characters required",
+        emailRequired: value => !!value || "E-mail is required",
         emailRegExp: value => {
-          const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return regExp.test(value) || 'Must be valid e-mail'
+          const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return regExp.test(value) || "Must be valid e-mail";
         }
       }
-    }
+    };
   },
   methods: {
-    onSubmit () {
+    onSubmit() {
       if (this.$refs.form.validate) {
         const user = {
           password: this.password,
           email: this.email
-        }
+        };
         this.$store
-          .dispatch('loginUser', user)
+          .dispatch("loginUser", user)
           .then(() => {
-            this.$router.push('/')
+            this.$router.push("/");
           })
-          .catch(() => {})
+          .catch(() => {});
       }
     },
-    resetForm () {
-      this.$refs.form.reset()
+    resetForm() {
+      this.$refs.form.reset();
     }
   },
   computed: {
-    loading () {
-      return this.$store.getters.loading
+    loading() {
+      return this.$store.getters.loading;
     }
   },
-  created () {
+  created() {
     if (this.$route.query.loginError && this.$store.getters.user === null) {
-      this.$store.dispatch('setError', 'Please register your account to view all pages')
+      this.$store.dispatch(
+        "setError",
+        "Please register your account to view all pages"
+      );
     }
   }
-}
+};
 </script>
 
 <style scoped>
