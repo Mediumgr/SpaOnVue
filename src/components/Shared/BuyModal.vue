@@ -99,7 +99,7 @@ export default {
           const regExp = /^(\+)?(\(\d{2,3}\) ?\d|\d)(([-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/;
           return (
             regExp.test(value) ||
-            "Please type your phone number: +7 (911) 111-11-11"
+            "Please type your phone number, for example: +7911-111-1111"
           );
         }
       }
@@ -126,12 +126,12 @@ export default {
             ownerId: this.ad.ownerId
           })
           .then(() => {
+            this.localLoading = false;
             this.openSuccessDialog = true;
           })
           .finally(() => {
             this.phone = "";
             this.name = "";
-            this.localLoading = false;
             this.$emit("update:openModal", false);
           });
       }
@@ -139,10 +139,10 @@ export default {
   },
   computed: {
     open: {
-      get: function() {
+      get() {
         return this.openModal;
       },
-      set: function() {
+      set() {
         this.$emit("update:openModal", false);
       }
     }
