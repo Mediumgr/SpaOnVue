@@ -35,6 +35,7 @@
               color="yellow darken-2"
               @click="onCancel"
               :disabled="localLoading"
+              text="false"
             >
               Close
             </v-btn>
@@ -43,6 +44,7 @@
               @click="onSave"
               :disabled="!valid"
               :loading="localLoading"
+              class="white--text"
             >
               Buy it!
             </v-btn>
