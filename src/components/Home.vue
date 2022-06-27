@@ -9,8 +9,8 @@
     </v-carousel>
     <v-row>
       <v-col class="col-sm-4" v-for="ad in ads" :key="ad.id">
-        <v-card class="mx-auto" max-width="400px">
-          <v-img :src="ad.imageSrc" height="200px"></v-img>
+        <v-card class="mx-auto" max-width="400px" contain>
+          <v-img :src="ad.imageSrc"></v-img>
           <v-card-title>{{ ad.title }}</v-card-title>
           <v-card-subtitle class="subtitle">
             {{ ad.description }}
